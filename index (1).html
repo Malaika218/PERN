@@ -84,7 +84,7 @@
 
         // Function to delete a course
         function deleteCourse(courseId) {
-            fetch(`${apiUrl}/api/courses`, {
+            fetch(`${apiUrl}/api/courses/${courseId}`, {
                 method: 'DELETE'
             })
                 .then(response => response.json())
