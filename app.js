@@ -6,9 +6,9 @@ const cors = require('cors')
 app.use(express.json());
 app.use(cors());
 const courses = [
-    {id: 1, name: 'course 1'},
-    {id: 2, name: 'course 2'},
-    {id: 3, name: 'course 3'}
+    {id: 1, name: 'course 1', instructor: 'instructor1'},
+    {id: 2, name: 'course 2', instructor: 'instructor2'},
+    {id: 3, name: 'course 3', instructor: 'instructor 3'}
 ];
 
 app.get('/', (req, res) => {
@@ -28,12 +28,13 @@ app.post('/api/courses', (req, res) => {
    const {error} = validateCourse(req.body);
     
     if (error) {
-        res.status(400).send(result.error.details[0].message);
+        res.status(400).send(error.details[0].message);
         return;
     }
     const course = {
         id: courses.length + 1,
-        name: req.body.name
+        name: req.body.name,
+        instructor: req.body.instructor //gets instreuctor body from server
     };
     courses.push(course);
     res.send(course);
@@ -61,12 +62,13 @@ app.put('/api/courses/:id', (req, res) => {
 
 });
 
-function validateCourse(course) {
+function validateCourse(course) { //passes the body 
     const schema = {
-        name: Joi.string().min(3).required()
+        name: Joi.string().min(3).required(),
+        instructor: Joi.string().min(3).required() //validation check for instructor body
     };
 
-    return Joi.validate(course,schema);
+    return Joi.validate(course,schema); //returns
 
 }
 
