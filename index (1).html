@@ -47,6 +47,10 @@
                         instructorTd.textContent = course.instructor;
                         tr.appendChild(instructorTd);
 
+                        const editTd = document.createElement('td');
+                        editTd.textContent = course.edit;
+                        tr.appendChild(editTd);
+
                         const actionsTd = document.createElement('td');
                         const deleteButton = document.createElement('button');
                         deleteButton.textContent = 'Delete';
@@ -55,6 +59,17 @@
                         });
                         actionsTd.appendChild(deleteButton);
                         tr.appendChild(actionsTd);
+
+                        courseList.appendChild(tr);
+
+                        const actTd = document.createElement('td');
+                        const editButton = document.createElement('button');
+                        editButton.textContent = 'Edit';
+                        editButton.addEventListener('click', function() {
+                            updateCourse(course.id);
+                        });
+                        editTd.appendChild(editButton);
+                        
 
                         courseList.appendChild(tr);
                     });
@@ -68,6 +83,28 @@
         function addCourse(name, instructor) {
             fetch(`${apiUrl}/api/courses`, {
                 method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name, instructor })
+            })
+                .then(response => response.json())
+                .then(course => {
+                    fetchCourses(); // Refresh the course list
+                })
+                .catch(error => {
+                    console.error('Error adding course:', error);
+                });
+        }
+
+        
+        // Function to edit/update a new course
+        function updateCourse(courseId) {
+            const name = prompt('Updated name');
+            const instructor = prompt('Updated instructor');
+
+            fetch(`${apiUrl}/api/courses/${courseId}`, {
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },

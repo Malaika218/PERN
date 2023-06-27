@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
 
 
 app.get('/api/courses', (req, res) => {
-res.send(courses);
+    res.send(courses);
 });
 
 app.get('/api/courses/:year/:month', (req, res) => {
@@ -48,7 +48,8 @@ app.put('/api/courses/:id', (req, res) => {
     if(!course) res.status(404).send('not found');
 
     const schema = {
-        name: Joi.string().min(3).required()
+        name: Joi.string().min(3).required(),
+        instructor: Joi.string().min(3).required()
     };
     const result = Joi.validate(req.body, schema);
 
@@ -58,6 +59,7 @@ app.put('/api/courses/:id', (req, res) => {
     }
 
     course.name = req.body.name;
+    course.instructor = req.body.instructor;
     res.send(course);
 
 });
